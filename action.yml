@@ -20,5 +20,5 @@ runs:
           $status = Get-CosmosDbEmulatorStatus
           Write-Host "Cosmos DB Emulator Status: $status" -ForegroundColor yellow
         } 
-        until ($result -eq "Running" -or ((Get-Date) -gt $endTime))
+        until ($status -eq "Running" -or ((Get-Date) -gt $endTime))
       shell: pwsh
