@@ -22,3 +22,4 @@ runs:
           }
           until ($result -eq "Running" -or ((Get-Date) -gt $endTime))
            Write-Host  "Cosmos DB Emulator is running" -ForegroundColor green
+      shell: pwsh
