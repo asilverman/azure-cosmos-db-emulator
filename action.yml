@@ -15,11 +15,10 @@ runs:
       shell: pwsh
     - run: |
         $timeout = New-TimeSpan -Minutes 5
-          $endTime = (Get-Date).Add($timeout)
-          do {
-            $status = Get-CosmosDbEmulatorStatus
-            Write-Host "Cosmos DB Emulator Status: $status" -ForegroundColor yellow
-          }
-          until ($result -eq "Running" -or ((Get-Date) -gt $endTime))
-           Write-Host  "Cosmos DB Emulator is running" -ForegroundColor green
+        $endTime = (Get-Date).Add($timeout)
+        do {
+          $status = Get-CosmosDbEmulatorStatus
+          Write-Host "Cosmos DB Emulator Status: $status" -ForegroundColor yellow
+        } 
+        until ($result -eq "Running" -or ((Get-Date) -gt $endTime))
       shell: pwsh
