@@ -3,17 +3,18 @@ description: 'Starts up the Azure Cosmos DB Emulator for use by your integration
 runs:
   using: "composite"
   steps:
-    - run: echo adding Microsoft.Azure.CosmosDB.Emulator PSModule to execution environment
+
+    - name: Add Microsoft.Azure.CosmosDB.Emulator PSModule to execution environment
       shell: pwsh
-    - run: echo "PSModulePath=$env:PSModulePath;$env:ProgramFiles\Azure Cosmos DB Emulator\PSModules\Microsoft.Azure.CosmosDB.Emulator" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      run: echo "PSModulePath=$env:PSModulePath;$env:ProgramFiles\Azure Cosmos DB Emulator\PSModules\Microsoft.Azure.CosmosDB.Emulator" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Start Microsoft.Azure.CosmosDB.Emulator
       shell: pwsh
-    - run: echo start Microsoft.Azure.CosmosDB.Emulator
+      run: Start-CosmosDbEmulator -NoUI -NoTelemetry -PartitionCount 2 -Consistency Strong -NoWait
+
+    - name: Wait for Microsoft.Azure.CosmosDB.Emulator to enter a 'running' state
       shell: pwsh
-    - run: Start-CosmosDbEmulator -NoUI -NoTelemetry -PartitionCount 2 -Consistency Strong -NoWait
-      shell: pwsh
-    - run: echo wait for Microsoft.Azure.CosmosDB.Emulator to enter a 'running' state
-      shell: pwsh
-    - run: |
+      run: |
         $timeout = New-TimeSpan -Minutes 5
         $endTime = (Get-Date).Add($timeout)
         do {
@@ -21,4 +22,3 @@ runs:
           Write-Host "Cosmos DB Emulator Status: $status" -ForegroundColor yellow
         } 
         until ($status -eq "Running" -or ((Get-Date) -gt $endTime))
-      shell: pwsh
